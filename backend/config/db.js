@@ -7,9 +7,9 @@ const connectDB = async () => {
             useNewUrlParser: true,
             // useCreateIndex: true
         })
-        console.log(`${conn.connection.host}`)
+        console.log(`${conn.connection.host}`.cyan.underline)
     } catch (error) {
-        console.log(` Error here: ${error.message}`)
+        console.log(` Error here: ${error.message}`.red.underline.bold)
         process.exit(1)
     }
 }
