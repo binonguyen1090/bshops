@@ -5,7 +5,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Product from '../components/Product'
 import {Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem} from 'react-bootstrap'
-import { addToCart } from '../actions/cartAction'
+import { addToCart, removeFromCart } from '../actions/cartAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 
 
@@ -28,7 +28,7 @@ const CartScreen = () => {
   },[dispatch,productId, qty])
 
   const removeFromCartHandler = (id) => {
-    console.log('remove')
+    dispatch(removeFromCart(id))
   }
   const checkoutHandler = () => {
     navigate('/login?redirect=shipping')
