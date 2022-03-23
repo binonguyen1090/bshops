@@ -4,7 +4,7 @@ import {Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem} from 'rea
 import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { getUserDetail } from '../actions/userAction'
+import { getUserDetail,updateUserProfile } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 
 
@@ -26,6 +26,9 @@ const ProfileScreen = () => {
 
   const userLogin = useSelector(state => state.userLogin)
   const {userInfo} = userLogin
+  
+  const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+  const {success} = userUpdateProfile
 
   useEffect(()=> {
     if(!userInfo){
@@ -45,6 +48,8 @@ const ProfileScreen = () => {
     if(password !== confirmPassword){
       setMessage('Password do not match')
     }else{
+      dispatch(updateUserProfile({id: user._id, name, email, password  }))
+
     }
   }
 
@@ -54,6 +59,7 @@ const ProfileScreen = () => {
       <h2>Profile</h2>
       {message && <Message variant='danger'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
+      {success && <Message variant='success'>Profile Updated</Message>}
       {loading && <Loader/>}
       <Form onSubmit={submitHandler}>
           <Form.Group controlId='name'>
