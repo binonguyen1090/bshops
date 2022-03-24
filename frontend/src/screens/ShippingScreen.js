@@ -8,6 +8,8 @@ import { login } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { saveShippingAddress } from '../actions/cartAction'
+import CheckoutSteps from '../components/CheckoutSteps'
+
 
 const ShippingScreen = () => {
 
@@ -31,6 +33,7 @@ const ShippingScreen = () => {
   
     return (
       <FormContainer>
+        <CheckoutSteps step1 step2 />
         <h1>Shipping</h1>
         <Form onSubmit={submitHandler}>
             <Form.Group controlId='address'>
