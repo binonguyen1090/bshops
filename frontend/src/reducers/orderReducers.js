@@ -1,5 +1,5 @@
 import React from 'react'
-import {ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS,ORDER_CREATE_FAIL} from '../constants/orderConstant'
+import {ORDER_DETAILS_FAIL,ORDER_DETAILS_SUCCESS, ORDER_DETAILS_REQUEST, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS,ORDER_CREATE_FAIL} from '../constants/orderConstant'
 
 export const orderCreateReducer = (state={}, action) => {
   switch(action.type){
@@ -15,6 +15,29 @@ export const orderCreateReducer = (state={}, action) => {
                 order: action.payload
             }
         case ORDER_CREATE_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+
+        default:
+            return state
+  }
+}
+export const orderDetailsReducer = (state={orderItems: [], shippingAddress:{}}, action) => {
+  switch(action.type){
+        case ORDER_DETAIL_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+            
+        case ORDER_DETAIL_SUCCESS:
+            return {
+                loading: false,
+                order: action.payload
+            }
+        case ORDER_DETAIL_FAIL:
             return {
                 loading: false,
                 error: action.payload
