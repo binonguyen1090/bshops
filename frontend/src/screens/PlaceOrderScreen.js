@@ -9,7 +9,7 @@ import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { saveShippingAddress } from '../actions/cartAction'
 import CheckoutSteps from '../components/CheckoutSteps'
-
+import { createOrder } from '../actions/orderAction'
 
 const PlaceOrderScreen = () => {
     const location = useLocation()
@@ -23,8 +23,27 @@ const PlaceOrderScreen = () => {
     cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 10
     cart.taxPrice = Number((0.15 * cart.itemsPrice).toFixed(2))
     cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2)
-    const placeOrderHandler = () => {
 
+    const orderCreate  = useSelector(state =>state.orderCreate)
+    const {order, success, error} = orderCreate
+
+
+    useEffect(() => {
+        if(success){
+            navigate(`/orders/${order._id}`)
+        }
+    },[success])
+
+    const placeOrderHandler = () => {
+        dispatch(createOrder({
+            orderItems: cart.cartItems,
+            shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice,
+        }))
     }
   return (
     <>
@@ -83,46 +102,50 @@ const PlaceOrderScreen = () => {
                 </ListGroup>
             </Col>
             <Col md={4}>
-                                                    <Card>
-                                                        <ListGroup variant='flush' >
-                                                            <ListGroup.Item>
-                                                                <h2>Order Summary</h2>
-                                                            </ListGroup.Item>
-                                                            <ListGroup.Item>
-                                                                <Row>
-                                                                    <Col>Items</Col>
-                                                                    <Col>${cart.itemsPrice}</Col>
-                                                                </Row>
-                                                            </ListGroup.Item>
-                                                            <ListGroup.Item>
-                                                                <Row>
-                                                                    <Col>Shipping</Col>
-                                                                    <Col>${cart.shippingPrice}</Col>
-                                                                </Row>
-                                                            </ListGroup.Item>
-                                                            <ListGroup.Item>
-                                                                <Row>
-                                                                    <Col>Tax</Col>
-                                                                    <Col>${cart.taxPrice}</Col>
-                                                                </Row>
-                                                            </ListGroup.Item>
-                                                            <ListGroup.Item>
-                                                                <Row>
-                                                                    <Col>Total</Col>
-                                                                    <Col>${cart.totalPrice}</Col>
-                                                                </Row>
-                                                            </ListGroup.Item>
-                                                            <ListGroup.Item>
-                                                                <Button type='button' 
-                                                                className='btn-block'
-                                                                disabled={cart.cartItems === 0}
-                                                                onClick={placeOrderHandler}>
-                                                                    Place Order
-                                                                </Button>
-                                                            </ListGroup.Item>
-                                                        </ListGroup>
-                                                    </Card>
-                                                </Col>
+                <Card>
+                    <ListGroup variant='flush' >
+                        <ListGroup.Item>
+                            <h2>Order Summary</h2>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Items</Col>
+                                <Col>${cart.itemsPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Shipping</Col>
+                                <Col>${cart.shippingPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Tax</Col>
+                                <Col>${cart.taxPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Total</Col>
+                                <Col>${cart.totalPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            {error && <Message variant='danger'>{error}</Message>}
+                        </ListGroup.Item>   
+                        
+                        <ListGroup.Item>
+                            <Button type='button' 
+                            className='btn-block'
+                            disabled={cart.cartItems === 0}
+                            onClick={placeOrderHandler}>
+                                Place Order
+                            </Button>
+                        </ListGroup.Item>
+                    </ListGroup>
+                </Card>
+            </Col>
         </Row>
     </>
   )
