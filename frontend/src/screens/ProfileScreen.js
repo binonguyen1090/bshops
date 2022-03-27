@@ -8,6 +8,7 @@ import { getUserDetail,updateUserProfile } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import { listMyOrder } from '../actions/orderAction'
 import {LinkContainer } from 'react-router-bootstrap'
+
 const ProfileScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')

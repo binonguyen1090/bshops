@@ -1,11 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import { Link } from 'react-router-dom'
-import {Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem} from 'react-bootstrap'
+import React, {useState} from 'react'
+import {Form, Button} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import { login } from '../actions/userAction'
-import { useParams,useNavigate, useLocation  } from 'react-router-dom';
+
+import {useNavigate  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { saveShippingAddress } from '../actions/cartAction'
 import CheckoutSteps from '../components/CheckoutSteps'
@@ -20,7 +17,6 @@ const ShippingScreen = () => {
     const [ postalCode, setPostalCode] = useState(shippingAddress.postalCode)
     const [ country, setCountry] = useState(shippingAddress.country)
   
-    const location = useLocation()
     const navigate = useNavigate()
     const dispatch = useDispatch()
   
