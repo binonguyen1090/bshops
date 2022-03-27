@@ -8,7 +8,7 @@ import { resgister } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import {LinkContainer } from 'react-router-bootstrap'
-import { listUsers } from '../actions/userAction'
+import { listUsers , deleteUser} from '../actions/userAction'
 
 
 const UserListScreen = () => {
@@ -21,6 +21,9 @@ const UserListScreen = () => {
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
+    const userDelete = useSelector(state => state.userDelete)
+    const {success:successDelete} = userDelete
+
 
     useEffect(() =>{
         if(userInfo && userInfo.isAdmin){
@@ -29,10 +32,12 @@ const UserListScreen = () => {
         }else{
             navigate('/login')
         }
-    },[dispatch])
+    },[dispatch,navigate, successDelete])
 
     const deleteHandler = (id) => {
-        console.log('delete')
+        if(window.confirm('Are you sure')){
+            dispatch(deleteUser(id))
+        }
     }
 
     return (
