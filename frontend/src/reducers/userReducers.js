@@ -1,5 +1,5 @@
 import React from 'react'
-import {USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS,USER_REGISTER_FAIL, USER_LOGIN_REQUEST,USER_LOGIN_SUCCESS, USER_LOGIN_FAIL,USER_LOGOUT, USER_DETAIL_REQUEST, USER_DETAIL_SUCCESS, USER_DETAIL_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL } from '../constants/userConstant'
+import {USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS,USER_REGISTER_FAIL, USER_LOGIN_REQUEST,USER_LOGIN_SUCCESS, USER_LOGIN_FAIL,USER_LOGOUT, USER_DETAIL_REQUEST, USER_DETAIL_SUCCESS, USER_DETAIL_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_DETAIL_RESET } from '../constants/userConstant'
 export const userLoginReducer = (state={}, action) => {
   switch(action.type){
         case USER_LOGIN_REQUEST:
@@ -36,6 +36,8 @@ export const userRegisterReducer = (state={}, action) => {
               return {loading: false, user: action.payload}
           case USER_DETAIL_FAIL:
               return {loading: false, error: action.payload}
+          case USER_DETAIL_RESET:
+              return {user: {}}
           default:
               return state
     }
