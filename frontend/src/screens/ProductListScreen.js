@@ -8,7 +8,7 @@ import { resgister } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import {LinkContainer } from 'react-router-bootstrap'
-import { listProducts } from '../actions/productAction'
+import { listProducts, deleteProduct } from '../actions/productAction'
 
 
 const ProductListScreen = () => {
@@ -18,6 +18,9 @@ const ProductListScreen = () => {
 
     const productList = useSelector(state => state.productList)
     const {loading, error, products } = productList
+
+    const productDelete = useSelector(state => state.productDelete)
+    const {loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
 
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
@@ -29,11 +32,11 @@ const ProductListScreen = () => {
         }else{
             navigate('/login')
         }
-    },[dispatch,navigate])
+    },[dispatch,navigate, successDelete,userInfo])
 
     const deleteHandler = (id) => {
         if(window.confirm('Are you sure')){
-            //delete products
+           dispatch(deleteProduct(id))
         }
     }
     const createProductHandler = (product) => {
@@ -52,6 +55,8 @@ const ProductListScreen = () => {
                     </Button>
                 </Col>
             </Row>
+            { loadingDelete && <Loader />}
+            { errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message>:(
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
