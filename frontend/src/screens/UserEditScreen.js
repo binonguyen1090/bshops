@@ -4,9 +4,10 @@ import {Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem} from 'rea
 import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { getUserDetail } from '../actions/userAction'
+import { getUserDetail, updateUser } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
+import { USER_UPDATE_RESET } from '../constants/userConstant'
 
 
 const UserEditScreen = () => {
@@ -23,25 +24,35 @@ const UserEditScreen = () => {
 
   const userDetail = useSelector(state => state.userDetail)
   const {loading, error, user} = userDetail
+
+  const userUpdate = useSelector(state => state.userUpdate)
+  const {loading: loadingUpdate, error: errorUpdate, success: successUpdate} = userUpdate
   
 
-  const redirect = location.search ? location.search.split('=')[1] : '/'
 
 
 
   useEffect(()=> {
-    if(!user.name || user._id !== id){
-        dispatch(getUserDetail(id))
+    if(successUpdate){
+      dispatch({type: USER_UPDATE_RESET})
+      navigate('/admin/userList')
     }else{
-      setName(user.name)
-      setEmail(user.email)
-      setIsAdmin(user.isAdmin)
+      if(!user.name || user._id !== id){
+        dispatch(getUserDetail(id))
+      }else{
+        setName(user.name)
+        setEmail(user.email)
+        setIsAdmin(user.isAdmin)
+      }
     }
-  }, [dispatch,user])
+
+
+    
+  }, [dispatch,user,id,successUpdate,navigate])
 
   const submitHandler = (e) => {
     e.preventDefault()
-    
+    dispatch(updateUser({_id:id, name, email, isAdmin}))
   }
 
   return (
@@ -50,7 +61,8 @@ const UserEditScreen = () => {
 
       <FormContainer>
       <h1>Edit user</h1>
-
+      {loadingUpdate && <Loader/>}
+      {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
       {loading ? <Loader/> : error ? <Message variant='danger'>{error}</Message>: (
 
       <Form onSubmit={submitHandler}>
