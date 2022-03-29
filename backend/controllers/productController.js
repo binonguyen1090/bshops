@@ -34,7 +34,7 @@ import asyncHandler from 'express-async-handler'
         user: req.user._id,
         image: '/images/sample.jpg',
         brand: 'Sample Brand',
-        category: 'Sample Brand',
+        category: 'Sample Category',
         countInStock: 0,
         numReviews: 0,
         description: 'Sample description'
