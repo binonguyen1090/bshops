@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { updateProduct, listProductDetail } from '../actions/productAction'
-
+import axios from 'axios'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstant'
@@ -25,6 +25,8 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
+
+  const [uploading, setupLoading] = useState(false)
 
   const productDetail = useSelector(state => state.productDetail)
   const {loading, error, product} = productDetail
@@ -65,6 +67,27 @@ const ProductEditScreen = () => {
       countInStock
     }))
   }
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0]
+    const formData = new FormData()
+
+    formData.append('image', file)
+    setupLoading(true)
+    try {
+      const config = {
+        headers : {
+            'Content-Type': 'multipart/form-data'
+        }
+      }
+      const {data} = await axios.post('/api/upload', formData, config)
+      setImage(data)
+      setupLoading(false)
+    } catch (error) {
+      console.log(error)
+      setupLoading(false)
+
+    }
+  }
 
   return (
     <>
@@ -91,6 +114,10 @@ const ProductEditScreen = () => {
           <Form.Group controlId='image'>
             <Form.Label>Image</Form.Label>
             <Form.Control type="text" placeholder='Enter image url' value={image} onChange={(e)=> setImage(e.target.value)}></Form.Control>
+            {/* <Card.File id="image-file" label='Choose File' custom onChange={uploadFileHandler}></Card.File> */}
+            <Form.Control type="file" id="image-file" label='Choose File'  custom size="sm" onChange={uploadFileHandler}/>
+            {uploading && <Loader />}
+            
           </Form.Group>
 
           <Form.Group controlId='brand'>
