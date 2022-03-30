@@ -10,8 +10,8 @@ import { login } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { saveShippingAddress } from '../actions/cartAction'
-import { getOrderDetails, payOrder } from '../actions/orderAction'
-import { ORDER_PAY_RESET } from '../constants/orderConstant'
+import { getOrderDetails, payOrder, deliverOrder } from '../actions/orderAction'
+import { ORDER_PAY_RESET,  ORDER_DELIVER_RESET} from '../constants/orderConstant'
 
 
 const OrderScreen = () => {
@@ -31,9 +31,17 @@ const OrderScreen = () => {
     const orderPay  = useSelector(state =>state.orderPay)
     const {loading: loadingPay, success: successPay} = orderPay
 
+    const orderDeliver  = useSelector(state =>state.orderDeliver)
+    const {loading: loadingDeliver, success: successDeliver} = orderDeliver
+
+    const userLogin = useSelector(state => state.userLogin)
+    const {userInfo} = userLogin
+
 
     useEffect(() => {
-
+        if(!userInfo){
+            navigate('/login')
+        }
         const addPaypalScript = async () => {
             const {data: clientId} = await axios.get('/api/config/paypal')
             const script = document.createElement('script')
@@ -49,8 +57,9 @@ const OrderScreen = () => {
         }
 
 
-        if(!order || successPay) {
+        if(!order || successPay || successDeliver) {
             dispatch({type: ORDER_PAY_RESET})
+            dispatch({type: ORDER_DELIVER_RESET})
             dispatch(getOrderDetails(id))
         }else if(!order.isPaid){
             if(!window.paypal){
@@ -59,11 +68,14 @@ const OrderScreen = () => {
                 setSdkReady(true)
             }
         }
-    }, [order, id, successPay]) 
+    }, [order, id, successPay, successDeliver]) 
 
     const successPaymentHandler = (paymentResult) => {
         console.log(paymentResult)
         dispatch(payOrder(id, paymentResult))
+    }
+    const deliverHandler = (paymentResult) => {
+        dispatch(deliverOrder(order))
     }
     
   return (
@@ -173,8 +185,12 @@ const OrderScreen = () => {
                                 
                             </ListGroup.Item>
                         )}
-                        
-                        
+                        {loadingDeliver && <Loader />}
+                        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                            <ListGroup.Item >
+                                <Button type='button' className='btn btn-block' onClick={deliverHandler}>Mark As Delivered</Button>
+                            </ListGroup.Item>
+                        )}
                     </ListGroup>
                 </Card>
             </Col>
