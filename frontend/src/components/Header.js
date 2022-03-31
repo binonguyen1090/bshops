@@ -4,12 +4,11 @@ import {LinkContainer} from "react-router-bootstrap";
 import {useDispatch, useSelector} from 'react-redux'
 import { logout } from '../actions/userAction';
 import SearchBox from './SearchBox';
-import { BrowserRouter as Router ,Route, Routes} from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch()
   const userLogin = useSelector(state => state.userLogin)
-  const {loading, error, userInfo} = userLogin
+  const {userInfo} = userLogin
 
 
   const logoutHandler = () => {

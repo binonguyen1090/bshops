@@ -1,23 +1,26 @@
-import React, {useEffect, useState} from 'react'
-import { Link } from 'react-router-dom'
-import {Table, Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem} from 'react-bootstrap'
+import React, {useEffect} from 'react'
+import {Table, Row, Col,  Button} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { resgister } from '../actions/userAction'
-import { useParams,useNavigate, useLocation  } from 'react-router-dom';
-import FormContainer from '../components/FormContainer'
+import {useNavigate, useParams  } from 'react-router-dom';
 import {LinkContainer } from 'react-router-bootstrap'
 import { listProducts, deleteProduct, createProduct } from '../actions/productAction'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstant'
+import Paginate from '../components/Paginate'
+
+
 
 const ProductListScreen = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const params = useParams()
 
+    const pageNumber = params.pageNumber || 1
+    const keyword = " "
     const productList = useSelector(state => state.productList)
-    const {loading, error, products } = productList
+    const {loading, error, products, page, pages } = productList
 
     const productDelete = useSelector(state => state.productDelete)
     const {loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
@@ -28,6 +31,7 @@ const ProductListScreen = () => {
     const productCreate = useSelector(state => state.productCreate)
     const {loading: loadingCreate,error: errorCreate, success: successCreate, product: createdProduct} = productCreate
 
+
     useEffect(() =>{
         dispatch({type: PRODUCT_CREATE_RESET})
 
@@ -37,12 +41,12 @@ const ProductListScreen = () => {
         if(successCreate){
             navigate(`/admin/product/${createdProduct._id}/edit`)
         }else{
-            dispatch(listProducts())
+            dispatch(listProducts('',pageNumber))
         }
 
 
 
-    },[dispatch,navigate, successDelete,userInfo,successCreate,createdProduct])
+    },[dispatch,navigate, successDelete,userInfo,successCreate,createdProduct,pageNumber])
 
     const deleteHandler = (id) => {
         if(window.confirm('Are you sure')){
@@ -73,6 +77,7 @@ const ProductListScreen = () => {
             { errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
             {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message>:(
+                <>
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
                         <tr>
@@ -108,6 +113,9 @@ const ProductListScreen = () => {
                         ))}
                     </tbody>
                 </Table>
+                <Paginate  pages={pages} page={page} keyword={keyword} isAdmin={true} />
+
+                </>
             )}
         </>
     )

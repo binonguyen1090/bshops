@@ -40,7 +40,7 @@ const ProductScreen = (props) => {
     }
 
     dispatch(listProductDetail(id))
-  },[dispatch, successProductReview])
+  },[dispatch, successProductReview,id])
 
   const addToCartHandler = () => {
     navigate(`/cart/${id}?qty=${qty}`)

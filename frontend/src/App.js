@@ -28,6 +28,8 @@ function App() {
           <Routes>
             <Route path='/' element={<HomeScreen />} />
             <Route path='/search/:keyword' element={<HomeScreen />} />
+            <Route path='/page/:pageNumber' element={<HomeScreen />} />
+            <Route path='/search/:keyword/page/:pageNumber' element={<HomeScreen />} />
             <Route path='/login' element={<LoginScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
             <Route path='/profile' element={<ProfileScreen />} />
@@ -39,6 +41,7 @@ function App() {
             <Route path='/cart/:id' element={<CartScreen />} />
             <Route path='/admin/userList' element={<UserListScreen />} />
             <Route path='/admin/productList' element={<ProductListScreen />} />
+            <Route path='/admin/productList/:pageNumber' element={<ProductListScreen />} />
             <Route path='/admin/orderList' element={<OrderListScreen />} />
             <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
             <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
