@@ -15,7 +15,7 @@ const SearchBox = () => {
         }
     }
   return (
-    <Form onSubmit={submitHandler}>
+    <Form onSubmit={submitHandler}className='SearchForm'>
         <Form.Control type='text' name='q' onChange={(e)=>setKeyword(e.target.value)} placeholder="Search..." className='mr-sm2 ml-sm-5'>
 
         </Form.Control>

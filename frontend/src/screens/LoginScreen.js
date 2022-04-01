@@ -30,6 +30,10 @@ const LoginScreen = () => {
     e.preventDefault()
     dispatch(login(email, password))
   }
+  const demoLogin = (e) => {
+    e.preventDefault()
+    dispatch(login('demo@example.com', '123456'))
+  }
 
   return (
     <FormContainer>
@@ -48,6 +52,7 @@ const LoginScreen = () => {
           </Form.Group>
 
           <Button type='submit' variant='primary'>Sign In</Button>
+          <Button  onClick={demoLogin} variant='warning'>Demo</Button>
       </Form>
       <Row className='py-3'>
          <Col>

@@ -7,6 +7,7 @@ import Message from '../components/Message'
 import { resgister } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
+import { login } from '../actions/userAction'
 
 
 const RegisterScreen = () => {
@@ -40,7 +41,11 @@ const RegisterScreen = () => {
       dispatch(resgister(name, email, password))
     }
   }
-
+  const demoLogin = (e) => {
+    e.preventDefault()
+    navigate('/')
+    dispatch(login('demo@example.com', '123456'))
+  }
   return (
     <FormContainer>
       <h1>Sign Up</h1>
@@ -70,6 +75,7 @@ const RegisterScreen = () => {
           </Form.Group>
 
           <Button type='submit' variant='primary'>Register</Button>
+          <Button  onClick={demoLogin} variant='warning'>Demo</Button>
       </Form>
       <Row className='py-3'>
          <Col>

@@ -18,6 +18,10 @@ h2 {
 .rating span {
     margin: 0.1rem;
 }
+.SearchForm{
+    display: flex;
+}
+
 
 /* carousel */
 .carousel-item-next,
