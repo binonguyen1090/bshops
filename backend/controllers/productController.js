@@ -106,6 +106,13 @@ import asyncHandler from 'express-async-handler'
     }
 
 })
+ const getTopProduct = asyncHandler( async (req, res) => {
+    const products = await Product.find({}).sort({rating: -1}).limit(3)
+
+    res.json(products)
+
+
+})
 
 export {
     getProducts,
@@ -113,5 +120,6 @@ export {
     deleteProduct,
     createProduct,
     updateProduct,
-    createProductReview
+    createProductReview,
+    getTopProduct
 }

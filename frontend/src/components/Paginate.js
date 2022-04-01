@@ -4,13 +4,6 @@ import { LinkContainer } from 'react-router-bootstrap'
 
 const Paginate = ({pages, page, isAdmin=false, keyword=''}) => {
 
-    console.log(pages)
-    console.log(page)
-    console.log(keyword)
-
-
-
-
   return pages > 1 && (
       <Pagination>
           {[...Array(pages).keys()].map(x => (
