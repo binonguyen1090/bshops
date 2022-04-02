@@ -8,6 +8,8 @@ import { getUserDetail,updateUserProfile } from '../actions/userAction'
 import { useParams,useNavigate, useLocation  } from 'react-router-dom';
 import { listMyOrder } from '../actions/orderAction'
 import {LinkContainer } from 'react-router-bootstrap'
+import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstant'
+
 
 const ProfileScreen = () => {
   const [name, setName] = useState('')
@@ -39,6 +41,7 @@ const ProfileScreen = () => {
       navigate('/login')
     }else{
       if (!user || !user.name || success) {
+        dispatch({type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetail('profile'))
         dispatch(listMyOrder())
       }else{
@@ -46,7 +49,7 @@ const ProfileScreen = () => {
         setEmail(user.email)
       }
     }
-  }, [dispatch,userInfo,user])
+  }, [dispatch,userInfo,user,success])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -54,7 +57,6 @@ const ProfileScreen = () => {
       setMessage('Password do not match')
     }else{
       dispatch(updateUserProfile({id: user._id, name, email, password  }))
-
     }
   }
 
